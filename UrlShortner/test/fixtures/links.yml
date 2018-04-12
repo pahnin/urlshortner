@@ -2,10 +2,10 @@
 
 one:
   user_id: 1
-  shortcode: MyString
-  source_link: MyText
+  shortcode: MyString1
+  source_link: MyText1
 
 two:
   user_id: 1
-  shortcode: MyString
-  source_link: MyText
+  shortcode: MyString2
+  source_link: example.com/123
