@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>User:</strong>
+  <%= @link.user_id %>
+</p>
+
+<p>
+  <strong>Shortcode:</strong>
+  <%= @link.shortcode %>
+</p>
+
+<p>
+  <strong>Source link:</strong>
+  <%= @link.source_link %>
+</p>
+
+<%= link_to 'Edit', edit_link_path(@link) %> |
+<%= link_to 'Back', links_path %>
