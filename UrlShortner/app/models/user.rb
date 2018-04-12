@@ -9,7 +9,7 @@ class User < ApplicationRecord
     
     # Uncomment the section below if you want users to be created if they don't exist
     unless user
-      user = User.create(email: data['email'])
+      user = User.create(email: data['email'], name: data['name'])
     end
     user
   end

@@ -15,6 +15,7 @@ class LinksController < ApplicationController
   # GET /links/new
   def new
     @link = Link.new
+    @link.user = current_user
   end
 
   # GET /links/1/edit
@@ -25,6 +26,7 @@ class LinksController < ApplicationController
   # POST /links.json
   def create
     @link = Link.new(link_params)
+    @link.user = current_user
 
     respond_to do |format|
       if @link.save
