@@ -1,0 +1,7 @@
+<br><br><br>
+
+Your key is <%= current_user.key || "not set" %>
+
+<br>
+
+<%= link_to "#{current_user.key.present? ? 'Update' : 'Set'} your API key", updatekey_path %>

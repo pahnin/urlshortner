@@ -12,6 +12,19 @@
   <body>
     <p class="notice"><%= notice %></p>
     <p class="alert"><%= alert %></p>
+
+    <% if current_user %>
+      <%= link_to "Sign out", users_sign_out_path, method: :delete %>
+      <br>
+      <%= link_to "Your URLs", links_path %>
+      <br>
+      <%= link_to "API key", apikey_path %>
+      <br>
+      Signed in as <strong><%= current_user.name %></strong>!
+    <% else %>
+      <%= link_to "Sign in with Google", user_google_oauth2_omniauth_authorize_path %>
+    <% end %>
+
     <%= yield %>
   </body>
 </html>

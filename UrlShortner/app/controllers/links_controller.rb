@@ -1,10 +1,12 @@
 class LinksController < ApplicationController
+  skip_before_action :verify_authenticity_token, if: :json_request?
+  before_action :login_wrapper
   before_action :set_link, only: [:show, :edit, :update, :destroy]
 
   # GET /links
   # GET /links.json
   def index
-    @links = Link.all
+    @links = current_user.links
   end
 
   # GET /links/1
@@ -16,10 +18,6 @@ class LinksController < ApplicationController
   def new
     @link = Link.new
     @link.user = current_user
-  end
-
-  # GET /links/1/edit
-  def edit
   end
 
   # POST /links
@@ -64,13 +62,47 @@ class LinksController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_link
-      @link = Link.find(params[:id])
+  # Use callbacks to share common setup or constraints between actions.
+  def set_link
+    @link = Link.find(params[:id])
+  end
+  
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def link_params
+    if json_request?
+      params.permit(:source_link)
+    else
+      params.require(:link).permit(:source_link, :key)
     end
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def link_params
-      params.require(:link).permit(:user_id, :shortcode, :source_link)
+  def json_params
+    params.permit(:key)
+  end
+  
+  def login_wrapper
+    if request.format.json?
+      if json_params[:key].present?
+        keybased_user = User.where(key: json_params[:key]).first
+        if keybased_user.present?
+          sign_in(:user, keybased_user)
+        else
+          return invalid_login_attempt
+        end
+      else
+        return invalid_login_attempt
+      end
+    else
+      authenticate_user!
     end
+  end
+
+  def invalid_login_attempt
+    warden.custom_failure!
+    render :json=> {:success=>false, :message=>"Error with your login or password"}, :status=>401
+  end
+
+  def json_request?
+    request.format.json?
+  end
 end
